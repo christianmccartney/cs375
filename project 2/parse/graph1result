@@ -1,0 +1,283 @@
+cons
+ token 31007296  ID            re  dtype  0  link 31007424
+ token 31007424  ID            im  dtype  0  link 0
+cons
+ token 31073744  ID             x  dtype  0  link 31073872
+ token 31073872  ID             y  dtype  0  link 0
+cons
+ token 31074320  ID             i  dtype  0  link 31074448
+ token 31074448  ID             n  dtype  0  link 0
+binop
+ token 31075088  OP            :=  dtype  0  link 0  operands 31075024
+ token 31075024  ID             i  dtype  0  link 31075152
+ token 31075152  NUM            0  dtype  0  link 0
+binop
+ token 31075664  OP             *  dtype  1  link 0  operands 31075600
+ token 31075600  NUM 6.250000e-02  dtype  1  link 31075856
+ token 31075728  ID             i  dtype  0  link 0
+binop
+ token 31075536  OP            :=  dtype  1  link 0  operands 31075472
+ token 31075472  ID             x  dtype  0  link 31075664
+ token 31075664  OP             *  dtype  1  link 0  operands 31075600
+cons
+ token 31076176  OP             -  dtype  0  link 0  operands 31076240
+ token 0  NULL
+
+in makefuncall
+
+end makefuncall
+binop
+ token 31076688  OP             *  dtype  1  link 0  operands 31076624
+ token 31076624  NUM 6.283180e+00  dtype  1  link 31076752
+ token 31076752  ID             x  dtype  0  link 0
+cons
+ token 31076688  OP             *  dtype  1  link 0  operands 31076624
+ token 0  NULL
+
+in makefuncall
+
+end makefuncall
+binop
+ token 31076432  OP             *  dtype  0  link 0  operands 31076368
+ token 31076368  OP       funcall  dtype  0  link 31076880  operands 31076048
+ token 31076880  OP       funcall  dtype  0  link 0  operands 31076496
+binop
+ token 31075984  OP            :=  dtype  1  link 0  operands 31075920
+ token 31075920  ID             y  dtype  0  link 31076432
+ token 31076432  OP                dtype  1  link 0  operands 31076368
+binop
+ token 31077328  OP             *  dtype  1  link 0  operands 31077264
+ token 31077264  NUM 3.200000e+01  dtype  1  link 31077392
+ token 31077392  ID             y  dtype  0  link 0
+cons
+ token 31077328  OP             *  dtype  1  link 0  operands 31077264
+ token 0  NULL
+
+in makefuncall
+
+end makefuncall
+binop
+ token 31077584  OP             +  dtype  0  link 0  operands 31077520
+ token 31077520  OP       funcall  dtype  0  link 31077648  operands 31077136
+ token 31077648  NUM           34  dtype  0  link 0
+binop
+ token 31077072  OP            :=  dtype  0  link 0  operands 31077008
+ token 31077008  ID             n  dtype  0  link 31077584
+ token 31077584  OP             +  dtype  0  link 0  operands 31077520
+cons
+ token 31077968  STR               dtype  0  link 0
+ token 0  NULL
+
+in makefuncall
+
+end makefuncall
+binop
+ token 31078416  OP             -  dtype  0  link 0  operands 31078352
+ token 31078352  ID             n  dtype  0  link 31078480
+ token 31078480  NUM            1  dtype  0  link 0
+binop
+ token 31078288  OP            :=  dtype  0  link 0  operands 31078224
+ token 31078224  ID             n  dtype  0  link 31078416
+ token 31078416  OP             -  dtype  0  link 0  operands 31078352
+cons
+ token 31078160  OP       funcall  dtype  0  link 31078288  operands 31077840
+ token 31078288  OP            :=  dtype  0  link 0  operands 31078224
+binop
+ token 31078672  OP             =  dtype  0  link 0  operands 31078608
+ token 31078608  ID             n  dtype  0  link 31078736
+ token 31078736  NUM            0  dtype  0  link 0
+makeprogn
+ token 31077776  OP         progn  dtype  0  link 0  operands 31078864
+ token 31078864  OP         label  dtype  0  link 0  operands 31078928
+makeprogn
+ token 31078544  OP         progn  dtype  0  link 0  operands 31078160
+ token 31078160  OP       funcall  dtype  0  link 31078288  operands 31077840
+makeprogn
+ token 31079120  OP         progn  dtype  0  link 0  operands 0
+ token 0  NULL
+makeif
+ token 31079184  OP            if  dtype  0  link 0  operands 31078672
+ token 31078672  OP             =  dtype  0  link 31079120  operands 31078608
+ token 31079120  OP         progn  dtype  0  link 31078992  operands 0
+ token 31078992  OP          goto  dtype  0  link 0  operands 31079056
+cons
+ token 31079376  STR            *  dtype  0  link 0
+ token 0  NULL
+
+in makefuncall
+
+end makefuncall
+cons
+ token 31079568  OP       funcall  dtype  0  link 0  operands 31079248
+ token 0  NULL
+cons
+ token 31077776  OP         progn  dtype  0  link 31079568  operands 31078864
+ token 31079568  OP       funcall  dtype  0  link 0  operands 31079248
+cons
+ token 31077072  OP            :=  dtype  0  link 31077776  operands 31077008
+ token 31077776  OP         progn  dtype  0  link 31079568  operands 31078864
+cons
+ token 31075984  OP            :=  dtype  1  link 31077072  operands 31075920
+ token 31077072  OP            :=  dtype  0  link 31077776  operands 31077008
+cons
+ token 31075536  OP            :=  dtype  1  link 31075984  operands 31075472
+ token 31075984  OP            :=  dtype  1  link 31077072  operands 31075920
+makeprogn
+ token 31075408  OP         progn  dtype  0  link 0  operands 31075536
+ token 31075536  OP            :=  dtype  1  link 31075984  operands 31075472
+makeprogn
+ token 31080272  OP         progn  dtype  0  link 0  operands 31075408
+ token 31075408  OP         progn  dtype  0  link 0  operands 31075536
+makeif
+ token 31080336  OP            if  dtype  0  link 0  operands 31080144
+ token 31080144  OP            <=  dtype  0  link 31080272  operands 0
+ token 31080272  OP         progn  dtype  0  link 0  operands 31075408
+ token 0  NULL
+binop
+ token 31080144  OP            <=  dtype  0  link 31080272  operands 31079696
+ token 31079696  ID             i  dtype  0  link 31075280
+ token 31075280  NUM           32  dtype  0  link 0
+binop
+ token 31080400  OP            :=  dtype  0  link 0  operands 31079760
+ token 31079760  ID             i  dtype  0  link 31080208
+ token 31080208  OP             +  dtype  0  link 0  operands 0
+binop
+ token 31080208  OP             +  dtype  0  link 0  operands 31079824
+ token 31079824  ID             i  dtype  0  link 31080464
+ token 31080464  NUM            1  dtype  0  link 0
+makeprogn
+ token 31079632  OP         progn  dtype  0  link 0  operands 31075088
+ token 31075088  OP            :=  dtype  0  link 0  operands 31075024
+cons
+ token 31079632  OP         progn  dtype  0  link 0  operands 31075088
+ token 0  NULL
+makeprogn
+ token 31074896  OP         progn  dtype  0  link 0  operands 31079632
+ token 31079632  OP         progn  dtype  0  link 0  operands 31075088
+makeprogn
+ token 31080848  OP         progn  dtype  0  link 0  operands 31005024
+ token 31005024  ID        output  dtype  0  link 0
+Symbol table level 1
+ 31006624         lim  CONST  typ INTEGER  val  32
+ 31006720           c  CONST  typ    REAL  val  6.283180e+00
+ 31006816           h  CONST  typ INTEGER  val  34
+ 31006912           s  CONST  typ INTEGER  val  32
+ 31007008           d  CONST  typ    REAL  val  6.250000e-02
+ 31073520     complex  TYPE   typ 31073424  lvl  1  siz    16  off     0
+(RECORD (re real)
+        (im real))
+ 31074064           x  VAR    1 typ    real  lvl  1  siz     8  off     0
+ 31074160           y  VAR    1 typ    real  lvl  1  siz     8  off     8
+ 31074640           i  VAR    0 typ integer  lvl  1  siz     4  off    16
+ 31074736           n  VAR    0 typ integer  lvl  1  siz     4  off    20
+yyparse result =        0
+ token 31080784  OP       program  dtype  0  link 0  operands 31004896
+(program graph1 (progn output)
+                (progn (progn (:= i 0)
+                              (label 1)
+                              (if (<= i 32)
+                                  (progn (progn (:= x (* 6.250000e-02
+                                                         (float i)))
+                                                (:= y (  (funcall exp (- x))
+                                                         (funcall sin (* 6.283180e+00
+                                                                         x))))
+                                                (:= n (+ (funcall round (* 3.200000e+01
+                                                                           y))
+                                                         34))
+                                                (progn (label 0)
+                                                       (progn (funcall write ' ')
+                                                              (:= n (- n 1)))
+                                                       (if (= n 0)
+                                                           (progn)
+                                                           (goto 0)))
+                                                (funcall writeln '*'))
+                                         (:= i (+ i 1))
+                                         (goto 1))))))
+# ---------------- Beginning of Generated Code --------------------
+        .file   "foo"
+        .text
+.globl graph1
+        .type   graph1, @function
+graph1:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp              # save base pointer on stack
+	.cfi_def_cfa_offset 16
+	movq	%rsp, %rbp        # move stack pointer to base pointer
+	.cfi_offset 6, -16
+	.cfi_def_cfa_register 6
+        subq	$48, %rsp 	  # make space for this stack frame
+	movq	%rbx, %r9        # save %rbx (callee-saved) in %r9
+# ------------------------- begin Your code -----------------------------
+	movl	$0,%eax         	#  0 -> %eax
+	movl	%eax,-32(%rbp)     	#  %eax -> i
+.L1:
+	movl	-32(%rbp),%eax     	#  i -> %eax
+	movl	$32,%ecx         	#  32 -> %ecx
+	cmpl	%ecx,%eax           	#  compare %eax - %ecx
+	jle	.L3 			#  jump if     <=
+	jmp	.L4 			#  jump 
+.L3:
+	movsd	.LC5(%rip),%xmm0   	#  0.062500 -> %xmm0
+	movl	-32(%rbp),%eax     	#  i -> %eax
+	cvtsi2sd	%eax,%xmm1    	#  float %eax -> %xmm1
+	mulsd	%xmm1,%xmm0         	#  %xmm0 * %xmm1 -> %xmm0
+	movsd	%xmm0,-48(%rbp)     	#  %xmm0 -> x
+	movsd	%xmm0,-40(%rbp)     	#  %xmm0 -> y
+	movsd	.LC6(%rip),%xmm0   	#  32.000000 -> %xmm0
+	movl	-40(%rbp),%ecx     	#  y -> %ecx
+	mulsd	%ecx,%xmm0         	#  %xmm0 * %ecx -> %xmm0
+	movsd	%xmm0,-8(%rbp)     	#  %xmm0 -> temp
+	call	round              	#  round()
+	movsd	-8(%rbp),%xmm1     	#  temp -> %xmm1
+	movl	$34,%ecx         	#  34 -> %ecx
+	addl	%ecx,%xmm0         	#  %xmm0 + %ecx -> %xmm0
+	movl	%xmm0,-28(%rbp)     	#  %xmm0 -> n
+.L0:
+	movl	$.LC7,%edi       	#  addr of literal .LC7
+	call	write              	#  write()
+	movl	-28(%rbp),%ecx     	#  n -> %ecx
+	movl	$1,%edx         	#  1 -> %edx
+	subl	%edx,%ecx         	#  %ecx - %edx -> %ecx
+	movl	%ecx,-28(%rbp)     	#  %ecx -> n
+	movl	-28(%rbp),%ecx     	#  n -> %ecx
+	movl	$0,%edx         	#  0 -> %edx
+	cmpl	%edx,%ecx           	#  compare %ecx - %edx
+	je	.L8 			#  jump if     ==
+	jmp	.L0 			#  jump 
+	jmp	.L9 			#  jump 
+.L8:
+.L9:
+	movl	$.LC10,%edi       	#  addr of literal .LC10
+	call	writeln              	#  writeln()
+	movl	-32(%rbp),%ecx     	#  i -> %ecx
+	movl	$1,%edx         	#  1 -> %edx
+	addl	%edx,%ecx         	#  %ecx + %edx -> %ecx
+	movl	%ecx,-32(%rbp)     	#  %ecx -> i
+	jmp	.L1 			#  jump 
+.L4:
+# ----------------------- begin Epilogue code ---------------------------
+	movq	%r9, %rbx        # restore %rbx (callee-saved) from %r9
+        leave
+        ret
+        .cfi_endproc
+.LFE0:
+        .size   graph1, .-graph1
+# ----------------- end Epilogue; Literal data follows ------------------
+        .section        .rodata
+	.align  4
+.LC7:
+	.string	" "
+	.align  4
+.LC10:
+	.string	"*"
+	.align  8
+.LC5:
+	.long	0   	#  0.062500
+	.long	1068498944
+	.align  8
+.LC6:
+	.long	0   	#  32.000000
+	.long	1077936128
+
+        .ident  "CS 375 Compiler - Fall 2017"

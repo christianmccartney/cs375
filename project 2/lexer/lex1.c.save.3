@@ -1,0 +1,363 @@
+
+/* lex1.c         14 Feb 01; 31 May 12       */
+
+/* This file contains code stubs for the lexical analyzer.
+   Rename this file to be lexanc.c and fill in the stubs.    */
+
+/* Copyright (c) 2001 Gordon S. Novak Jr. and
+   The University of Texas at Austin. */
+
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include "token.h"
+#include "lexan.h"
+#include <math.h>
+
+char *operator[] = {" ", "+", "-", "*", "/", ":=", "=", "<>", "<", "<=", ">=", ">", "^", ".", "and", "or", "not", "div", "mod", "in"};
+char *delimiter[] = {" ", ",", ";", ":", "(", ")", "[", "]", ".."};
+char *reserved[] = {" ","array", "begin", "case", "const", "do",
+			"downto", "else", "end", "file", "for",
+			"function", "goto", "if", "label", "nil",
+			"of", "packed", "procedure", "program", "record",
+ 			"repeat", "set", "then", "to", "type",
+			"until", "var", "while", "with" };
+
+
+/* This file will work as given with an input file consisting only
+   of integers separated by blanks:
+   make lex1
+   lex1
+   12345 123    345  357
+   */
+
+/* Skip blanks and whitespace.  Expand this function to skip comments too. */
+void skipblanks () {
+     	int c;
+      	while ((c = peekchar()) != EOF && (c == ' ' || c == '\n' || c == '\t'
+			|| c == '{' || ( c == '(' && peek2char() == '*') )) {
+
+		if(peekchar() == '{') {
+			while(peekchar() != '}') {
+				getchar();
+			}
+		}
+		if(peekchar() == '(' && peek2char() == '*') {
+			getchar();
+			getchar();
+			while(peekchar() != '*' && peek2char() != ')') {
+				getchar();
+			}
+			getchar();
+			getchar();
+		}
+		getchar();
+	}
+}
+
+/* Get identifiers and reserved words */
+TOKEN identifier (TOKEN tok) {
+	char string[16];
+	char c = peekchar();
+	int i = 0;
+	while(CHARCLASS[c] == ALPHA || CHARCLASS[c] == NUMERIC) {
+		c = getchar();
+		if(i < 15) {
+			string[i] = c;
+			i++;
+		}
+		c = peekchar();
+	}
+	string[i] = 0;
+	string[15] = 0;
+	strcpy(tok->stringval, string);
+	tok->tokentype = IDENTIFIERTOK;
+	tok->datatype = STRINGTYPE;
+
+	i = 1;
+	for(; i < 30; i++) {
+		if(strcmp(reserved[i], string) == 0) {
+			tok->tokentype = RESERVED;
+//			tok->datatype = STRINGTYPE;
+			tok->whichval = i;
+		}
+	}
+
+	i = 0;
+	for(; i < 20; i++) {
+		if(strcmp(operator[i], string) == 0) {
+			tok->tokentype = OPERATOR;
+			tok->whichval = i;
+		}
+	}
+}
+
+TOKEN getstring (TOKEN tok) {
+	char string[16];
+	int index = 0, loop = 1;
+	int c;
+	getchar();							//grab first apostrophe
+	while(loop){
+		c = getchar();					//first character of string, assuming at least length 1
+		//escaped apostrophe
+		if(peekchar() == '\''){
+			if(peek2char() != '\''){
+				getchar();
+				//if not at max string
+				if(index < 15){
+					string[index] = c;
+					string[index+1] = 0;		//not escaped, null terminate string
+				}
+				loop = 0;
+			}
+			else{						//escaped, grab one apostrophe
+				getchar();
+				string[index] = c;
+				index++;
+			}
+		}
+		else{							//normal character
+			//if not at max string
+			if(index < 15){
+				string[index] = c;
+				index++;
+			}
+		}
+		string[15] = 0;					//null terminate, special condition where string is too large
+	}
+	strcpy(tok->stringval, string);
+	tok->tokentype = STRINGTOK;
+	tok->datatype = STRINGTYPE;
+}
+
+TOKEN special (TOKEN tok) {
+int c = peekchar();
+	int index = 0, i = 0;
+	char string[3];
+	//special guaranteed to be 1 character long
+	if(c != ':' && c != '<' && c != '>' && c != '.'){
+		c = getchar();
+		string[0] = c;
+		string[1] = 0;
+	}
+	//special may be longer than 1 character
+	else{
+		c = getchar();
+		int cc = peekchar();
+		//printf("c = %c, cc = %c\n", c, cc);
+		if(cc != '>' && cc != '=' && cc != '.'){
+			string[0] = c;
+			string[1] = 0;
+		}
+		else{
+			cc = getchar();
+			string[0] = c;
+			string[1] = cc;
+			string[2] = 0;
+		}
+	}
+	
+	for(; i < sizeof(operator)/sizeof(char*); i++){
+		if(strcmp(operator[i], string) == 0){
+			strcpy(tok->stringval, string);
+			tok->tokentype = OPERATOR;
+			index = i;
+		}
+	}
+	i = 0;
+	for(; i < sizeof(delimiter)/sizeof(char*); i++){
+		if(strcmp(delimiter[i], string) == 0){
+			strcpy(tok->stringval, string);
+			tok->tokentype = DELIMITER;
+			index = i;
+		}
+	}
+	tok->datatype = STRINGTYPE;
+	tok->whichval = index;
+		
+}
+
+int exponent(){
+	char expo[3];
+	char c = peekchar();
+	int isNegative = 0;
+	int index = 0, num = 0;
+	if(c == '-' || c == '+'){
+		if(c == '-')
+			isNegative = 1;
+		c = getchar();
+	}
+	//skip leading zeros
+	while(peekchar() == '0')
+		getchar();
+	while(((c = peekchar()) == '-' || c == '+' || CHARCLASS[c] == NUMERIC) && index < 3){
+		c = getchar();
+		expo[index] = c;
+		num = num * 10 + (c - '0');
+		index++;
+	}
+	
+	if(isNegative)
+		num *= -1;
+	return num;
+	
+}
+
+/* Get and convert unsigned numbers of all types. */
+TOKEN number (TOKEN tok) {
+/*
+	long num;
+	int  c, charval;
+	num = 0;
+	while ( (c = peekchar()) != EOF	&& CHARCLASS[c] == NUMERIC) {
+		c = getchar();
+		charval = (c - '0');
+		num = num * 10 + charval;
+	}
+	tok->tokentype = NUMBERTOK;
+	tok->datatype = INTEGER;
+	tok->intval = num;
+	return (tok);
+*/
+
+long num = 0;
+    int  c, charval;
+	char integ[100];
+	char frac[100];	//null terminate these when done
+	int decFound = 0, index = 0, decIndex = 0, integCount = 0, fracCount = 0, eFound = 0, i = 0;
+	int tens = 0;		//num * 10^0 initially
+	int sigOffset = 0;	//subtract from index to get number of significant digits
+	int expo = 0;
+	int startSig = 0;		//once a significant figure is foundm, set to 1
+	int zerosAfterDec = 0;	//counts the number of zeros after the decimal. use when there are only 0's before decimal
+	int zerosBeforeDec = 0; //counts the number of zeros skipped before the decimal point.
+    while ((c = peekchar()) != EOF && ((CHARCLASS[c] == NUMERIC) || c == '.' || c == 'e')){ 
+		while(((c = peekchar()) == '0' || c == '.') && !startSig){			//while(((c = peekchar()) == '0' || c == '.') && !startSig && CHARCLASS[c] == NUMERIC){	<- this does not work. dont try again
+			c = getchar();
+			if(c == '.' && peekchar() == '.'){
+				//put back '.' and this number is done
+				ungetc(c, stdin);
+				tok->tokentype = NUMBERTOK;
+				tok->datatype = INTEGER;
+				tok->intval = num;
+				return tok;						//special condition for 0 followed by .. delimiter
+				
+			}
+			if(c == '.'){
+				decFound = 1;
+				decIndex = index;
+			}
+			else if(decFound && c == '0'){					//this is messing with frac[] array. something with decIndex i think...
+				zerosAfterDec++;
+			}
+			else if(!decFound && c == '0'){
+				zerosBeforeDec++;
+			}
+			index++;
+		}
+		//printf("zerosAfterDec = %d, zerosBeforeDec = %d\n", zerosAfterDec, zerosBeforeDec);
+		if(c == '.' && peek2char() == '.')
+			break;
+		startSig = 1;
+		sigOffset = index;
+		c = getchar();
+		if(c == 'e'){
+			expo = exponent();
+			eFound = 1;
+		}
+		else if(c == '.'){
+			decIndex = index;
+			decFound = 1;
+		}
+		else if(CHARCLASS[c] == NUMERIC){
+			if(!decFound){					//adding integer part
+			charval = (c - '0');
+			num = num * 10 + charval;
+			integ[index - zerosBeforeDec] = c;
+			integCount++;
+			}
+			else if(decFound && c != '.'){
+				frac[index - decIndex - zerosAfterDec - 1] = c;
+				fracCount++;
+			}
+		}
+		else						//special case for 0 and trimming non significant digits
+			ungetc(c, stdin);
+		index++;
+    }
+	
+	//if integer, check for overflow
+	char maxint[10] = "2147483647";
+	int greater = 0;
+	if(!decFound && integCount > 0){
+		if(integCount > 10)
+			printf("ERROR: INTEGER OVERFLOW FOR FOLLOWING TOKEN\n");
+		if(integCount == 10){
+			int i = 0;
+			while(integ[i] == maxint[i] && i < integCount)
+				i++;
+			if(i != integCount){
+				if(integ[i] > maxint[i])
+					printf("ERROR: INTEGER OVERFLOW FOR FOLLOWING TOKEN\n");
+			}
+		}
+	}
+	
+	//if decFound && integCount > 8. truncate and modify exponent
+	char integ2[8];
+	if(decFound && integCount > 8){	
+		fracCount = 0;							//all 8 significant digits will be in integ[]
+		expo += integCount - 8;
+		integCount = 8;
+		
+		//recalculate num
+		i = 0;
+		num = 0;
+		for(; i < 8; i++){
+			charval = integ[i] - '0';
+			num = num * 10 + charval;
+		}
+	}
+	/* if(decFound && fracCount > 8){
+		integCount = 0;
+		expo -= fracCount - 8;
+		fracCount = 8;
+	} */
+
+    tok->tokentype = NUMBERTOK;
+	if(!decFound && !eFound){
+		tok->datatype = INTEGER;
+		tok->intval = num;
+	}
+	else{
+		float mult = 0.1f;
+		float fNum = num/1.0;
+		int j = 0;
+		for(; j < fracCount; j++){
+			fNum = fNum + (frac[j] - '0')*mult;
+			mult /= 10;
+		}
+		if((expo - zerosAfterDec) > 38 || (expo - zerosAfterDec) < -38)
+			printf("ERROR: FLOAT OVERFLOW FOR FOLLOWING TOKEN\n");
+		fNum = fNum * pow(10.0, expo/1.0) * pow(10.0, -zerosAfterDec/1.0);				//adding in multiplication by factor of 10
+		tok->datatype = REAL;
+		tok->realval = fNum;
+	}
+    return (tok);
+}
+
